@@ -1,0 +1,185 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Customer Reviews</title>  
+    <style>  
+        body {  
+            font-family: Arial, sans-serif;  
+            margin: 0;  
+            padding: 20px;  
+            color: #333;  
+            background-image: url('https://your-background-image-url.jpg'); /* Replace with your image URL */  
+            background-size: cover;  
+            background-position: center;  
+        }  
+
+        .container {  
+            width: 80%;  
+            max-width: 800px;  
+            margin: auto;  
+            background: rgba(255, 255, 255, 0.9);  
+            border-radius: 10px;  
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);  
+            padding: 20px;  
+        }  
+
+        h1, h2 {  
+            text-align: center;  
+        }  
+
+        #review-form {  
+            padding: 20px;  
+            margin-bottom: 20px;  
+        }  
+
+        input[type="text"], input[type="url"], textarea {  
+            width: 100%;  
+            padding: 10px;  
+            margin-bottom: 10px;  
+            border: 1px solid #ccc;  
+            border-radius: 5px;  
+            font-size: 16px;  
+        }  
+
+        .rating {  
+            margin-bottom: 10px;  
+            display: flex;  
+            justify-content: center;  
+        }  
+
+        .star {  
+            font-size: 30px;  
+            cursor: pointer;  
+            color: lightgray;   
+            margin: 0 5px;  
+        }  
+
+        .star.selected, .star:hover, .star:hover ~ .star {  
+            color: gold;  
+        }  
+
+        .review {  
+            background: #fff;  
+            padding: 10px;  
+            margin: 10px 0;  
+            border-radius: 5px;  
+            display: flex;  
+            align-items: flex-start;  
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);  
+        }  
+
+        .review img {  
+            max-width: 80px;  
+            margin-right: 10px;  
+            border-radius: 5px;  
+        }  
+
+        .review-content {  
+            flex-grow: 1;  
+        }  
+
+        button {  
+            background-color: #28a745;  
+            color: white;  
+            border: none;  
+            border-radius: 5px;  
+            padding: 10px 15px;  
+            cursor: pointer;  
+            font-size: 16px;  
+            transition: background 0.3s;  
+        }  
+
+        button:hover {  
+            background-color: #218838;  
+        }  
+
+        footer {  
+            text-align: center;  
+            margin-top: 20px;  
+            font-size: 14px;  
+        }  
+    </style>  
+</head>  
+<body>  
+    <div class="container">  
+        <h1>Customer Reviews</h1>  
+        <div id="review-form">  
+            <h2>Leave a Review</h2>  
+            <form id="new-review">  
+                <input type="text" id="name" placeholder="Your Name" required>  
+                <textarea id="review-text" placeholder="Your Review" required></textarea>  
+                <input type="url" id="image-url" placeholder="Image URL (optional)">  
+                <div class="rating">  
+                    <label>Rating:</label>  
+                    <span class="star" data-value="1">&#9733;</span>  
+                    <span class="star" data-value="2">&#9733;</span>  
+                    <span class="star" data-value="3">&#9733;</span>  
+                    <span class="star" data-value="4">&#9733;</span>  
+                    <span class="star" data-value="5">&#9733;</span>  
+                </div>  
+                <button type="submit">Submit Review</button>  
+            </form>  
+        </div>  
+
+        <div id="reviews">  
+            <h2>All Reviews</h2>  
+            <div id="review-list"></div>  
+        </div>  
+
+        <footer>  
+            &copy; 2024 Your Company Name  
+        </footer>  
+    </div>  
+
+    <script>  
+        let selectedRating = 0;  
+
+        // Star click event listener  
+        document.querySelectorAll('.star').forEach(star => {  
+            star.addEventListener('click', function() {  
+                selectedRating = this.getAttribute('data-value');   
+                updateStarSelection();  
+            });  
+        });  
+
+        function updateStarSelection() {  
+            document.querySelectorAll('.star').forEach(star => {  
+                star.classList.remove('selected');  
+                if (star.getAttribute('data-value') <= selectedRating) {  
+                    star.classList.add('selected'); // Fill the star if it's less than or equal to selected rating  
+                }  
+            });  
+        }  
+
+        document.getElementById('new-review').addEventListener('submit', function(event) {  
+            event.preventDefault();  
+
+            const name = document.getElementById('name').value;  
+            const reviewText = document.getElementById('review-text').value;  
+            const imageUrl = document.getElementById('image-url').value;  
+
+            const reviewList = document.getElementById('review-list');  
+            const reviewDiv = document.createElement('div');  
+            reviewDiv.classList.add('review');  
+
+            reviewDiv.innerHTML = `  
+                ${imageUrl ? `<img src="${imageUrl}" alt="Review image" onerror="this.style.display='none'">` : ''}  
+                <div class="review-content">  
+                    <strong>${name}</strong>  
+                    <p>${reviewText}</p>  
+                    <p>${'★'.repeat(selectedRating)}${'☆'.repeat(5 - selectedRating)}</p>  
+                </div>  
+            `;  
+
+            reviewList.appendChild(reviewDiv);  
+
+            // Clear the input fields and reset the rating  
+            document.getElementById('new-review').reset();  
+            selectedRating = 0;  
+            updateStarSelection();  
+        });  
+    </script>  
+</body>  
+</html>
